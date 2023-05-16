@@ -10,14 +10,21 @@ public class UsersController : ControllerBase
     [HttpGet]
     public IEnumerable<string> Get()
     {
-        return new string[] { "value1", "value2" };
+        List<string> list = new();
+
+        for (int j = 0; j < Random.Shared.Next(2, 10); j++)
+        {
+            list.Add($"Value #{j + 1}");
+        }
+
+        return list;
     }
 
     // GET api/Users/5
     [HttpGet("{id}")]
     public string Get(int id)
     {
-        return "value";
+        return $"value #{id+1}";
     }
     // Creates a new record
     // POST api/Users
