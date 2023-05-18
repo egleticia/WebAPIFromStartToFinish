@@ -26,7 +26,7 @@ public class UsersController : ControllerBase
         return _config.GetConnectionString("Default");
     }
 
-    // POST api/<UsersController>
+    // POST api/Users
     [HttpPost]
     public void Post([FromBody] string value)
     {
