@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace ApiSecurity.Controllers;
@@ -10,8 +12,8 @@ namespace ApiSecurity.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IConfiguration _config;
-    public AuthenticationController(IConfiguration config) 
-    { 
+    public AuthenticationController(IConfiguration config)
+    {
         _config = config;
     }
 
@@ -26,10 +28,11 @@ public class AuthenticationController : ControllerBase
     {
         var user = ValidateCredentials(data);
 
-        if(user is null)
+        if (user is null)
             return Unauthorized();
-        //TODO: Finalizar Método
-        throw new NotImplementedException();
+        var token = GenerateToken(user);
+
+        return Ok(token);
     }
 
     private string GenerateToken(UserData user)
@@ -39,8 +42,21 @@ public class AuthenticationController : ControllerBase
                 _config.GetValue<string>("Authentication:SecretKey")));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
-        //TODO: Finalizar Método
-        throw new NotImplementedException();
+        List<Claim> claims = new();
+
+        //Way of identify a user:
+        claims.Add(new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()));
+        claims.Add(new(JwtRegisteredClaimNames.UniqueName, user.UserName));
+
+        var token = new JwtSecurityToken(
+            _config.GetValue<string>("Authentication:Issuer"),
+            _config.GetValue<string>("Authentication:Audience"),
+            claims,
+            DateTime.UtcNow, //When this token becomes valid
+            DateTime.UtcNow.AddMinutes(1), //When the token will expire
+            signingCredentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     private UserData? ValidateCredentials(AuthenticationData data)
