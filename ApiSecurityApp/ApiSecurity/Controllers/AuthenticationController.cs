@@ -20,7 +20,7 @@ public class AuthenticationController : ControllerBase
 
     // Records = readonly Classes
     public record AuthenticationData(string? UserName, string? Password);
-    public record UserData(int UserId, string UserName);
+    public record UserData(int UserId, string UserName, string Title, string EmployeeId);
 
     //api/Authentication/token
     [HttpPost("token")]
@@ -47,6 +47,8 @@ public class AuthenticationController : ControllerBase
         //Way of identify a user:
         claims.Add(new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()));
         claims.Add(new(JwtRegisteredClaimNames.UniqueName, user.UserName));
+        claims.Add(new("title", user.Title));
+        claims.Add(new("employeeId", user.EmployeeId));
 
         var token = new JwtSecurityToken(
             _config.GetValue<string>("Authentication:Issuer"),
@@ -65,13 +67,13 @@ public class AuthenticationController : ControllerBase
         if (CompareValues(data.UserName, "egleticia")
             && CompareValues(data.Password, "Test123"))
         {
-            return new UserData(1, data.UserName!);
+            return new UserData(1, data.UserName!, "Business Owner", "E001");
         }
 
         if (CompareValues(data.UserName, "tcorey")
            && CompareValues(data.Password, "Test123"))
         {
-            return new UserData(2, data.UserName!);
+            return new UserData(2, data.UserName!, "Head of Security", "E005");
         }
         return null;
     }
