@@ -22,7 +22,8 @@ public class UsersController : ControllerBase
 
     // GET api/<UsersController>/5
     [HttpGet("{id}")]
-    [Authorize] //Indicates that you need to be authorized to access this endpoint
+    // [Authorize] //Indicates that you need to be authorized to access this endpoint
+    [Authorize(Policy = "MustHaveEmployeeId")]
     public string Get(int id)
     {
         return _config.GetConnectionString("Default");
