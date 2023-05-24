@@ -1,6 +1,8 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using ApiSecurity.Constants;
+using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +14,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization(opts =>
 {
-    opts.AddPolicy("MustHaveEmployeeId", policy =>
+    opts.AddPolicy(PolicyConstants.MustHaveEmployeeId, policy =>
     {
         policy.RequireClaim("employeeId");
+    });
+
+    opts.AddPolicy(PolicyConstants.MustBeTheOwner, policy =>
+    {
+        policy.RequireClaim("title", "Business Owner");
+    });
+    opts.AddPolicy(PolicyConstants.MustBeAVeteranEmployee, policy =>
+    {
+        policy.RequireClaim("employeeId", "E001", "E002", "E003");
     });
     opts.FallbackPolicy = new AuthorizationPolicyBuilder()
     .RequireAuthenticatedUser()
