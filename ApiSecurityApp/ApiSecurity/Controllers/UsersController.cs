@@ -25,7 +25,7 @@ public class UsersController : ControllerBase
     [HttpGet("{id}")]
     // [Authorize] //Indicates that you need to be authorized to access this endpoint
     [Authorize(Policy = PolicyConstants.MustHaveEmployeeId)]
-    [Authorize(Policy = PolicyConstants.MustBeTheOwner)]
+    [Authorize(Policy = PolicyConstants.MustBeAVeteranEmployee)]
     public string Get(int id)
     {
         return _config.GetConnectionString("Default");
