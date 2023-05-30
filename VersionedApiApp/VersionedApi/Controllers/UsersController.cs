@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace VersionedApi.Controllers
 {
-    [Route("api/[controller]")]
+
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class UsersController : ControllerBase
     {
-        // GET: api/<UsersController>
+        // GET: api/UsersController
+        //GET: api/v1/users
         [HttpGet]
         public IEnumerable<string> Get()
         {
