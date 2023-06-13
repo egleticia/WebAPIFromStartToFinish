@@ -24,7 +24,7 @@ builder.Services.AddSwaggerGen(opts =>
     opts.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = $"{title} v1",
+        Title = $"{title} v1 (Deprecated)",
         Description = description,
         TermsOfService = terms,
         License = license,
@@ -53,10 +53,7 @@ builder.Services.AddVersionedApiExplorer(opts =>
 {
     opts.GroupNameFormat = "'v'VVV";
     opts.SubstituteApiVersionInUrl= true;
-}
-
-
-);
+});
 
 var app = builder.Build();
 
