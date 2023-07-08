@@ -21,7 +21,7 @@ namespace TodoLibrary.DataAcess
         public async Task<TodoModel?> GetOneAssigned(int assignedTo, int todoId)
         {
             var result = await _sql.LoadData<TodoModel, dynamic>(
-                 "dbo.spTodos_GetAllAssigned",
+                 "dbo.spTodos_GetOneAssigned",
                  new { AssignedTo = assignedTo, TodoId = todoId },
                  "Default");
 
@@ -57,7 +57,7 @@ namespace TodoLibrary.DataAcess
         public Task DeleteTodo(int assignedTo, int todoId)
         {
             return _sql.SaveData<dynamic>(
-                 "dbo.spTodos_CompleteTodo",
+                 "dbo.spTodos_Delete",
                  new { AssignedTo = assignedTo, TodoId = todoId },
                  "Default");
         }
